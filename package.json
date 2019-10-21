@@ -1,0 +1,12 @@
+{
+  "name": "telemetryjs",
+  "version": "1.0.0",
+  "description": "A simple tool for logging",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
