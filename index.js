@@ -1,21 +1,30 @@
-const Events = {};
+const EventEmitter = require('events');
+const Telemetry = new EventEmitter();
 
-const Handle = function HandleEvent(event_trigger, func) {
-    let Event = Events[event_trigger] || [];
-    Event.push(func);
-    Events[event_trigger] = Event;
+let NoHandler = Function.prototype;
+
+const NoEventHandler = (func) => {
+    NoHandler = func;
+};
+
+const On = function OnEvent(event_trigger, func) {
+    Telemetry.on(event_trigger, func);
 }
 
 const Trigger = function TriggerEvent(event_trigger, data) {
-    let Event = Events[event_trigger] || [];
-    return Event.map(func => {
-        return new Promise((resolve, _reject) => {
-            resolve(func(data));
-        });
-    });
+    const eventsTrigger = Telemetry.emit(event_trigger, data);
+    if (!eventsTrigger) {
+        NoHandler(event_trigger);
+    }
 }
 
+const Once = function HandleOnce(event_trigger, func) {
+    Telemetry.once(event_trigger, func);
+};
+
 module.exports = {
+    NoEventHandler,
     Trigger,
-    Handle
+    On,
+    Once
 };
